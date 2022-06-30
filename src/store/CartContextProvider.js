@@ -1,10 +1,15 @@
 import { useReducer, useState } from "react";
 import CartContext from "./context";
 
+const defaultReducer = {
+  items: [],
+  totalAmt: 0,
+};
+
 const reducer = (state, action) => {
   if (action.type === "ADD") {
     let updateItems;
-    const sumUpTotal = state.totalAmt + action.payload.amt * action.payload.qty;
+    const sumUpTotal = state.totalAmt + action.payload.price * action.payload.qty;
     const existingIdx = state.items.findIndex(
       (items) => items.id === action.payload.id
     );
@@ -28,7 +33,7 @@ const reducer = (state, action) => {
     const existingIdx = state.items.findIndex((item) => item.id === action.id);
     const existingItem = state.items[existingIdx];
     let updateItems;
-    const sumUpTotal = state.totalAmt - (existingItem.amt * existingItem.qty);
+    const sumUpTotal = state.totalAmt - (existingItem.price * existingItem.qty);
     if (existingItem.qty === 1) {
       updateItems = state.items.filter((item) => item.id !== action.id);
     } else {
@@ -38,33 +43,40 @@ const reducer = (state, action) => {
     return { items: updateItems, totalAmt: sumUpTotal };
   }
 
-  return { items: [], totalAmt: 0 };
-};
+  if (action.type === "RESET") {
+    return defaultReducer;
+  }
 
-const defaultReducer = {
-  items: [],
-  totalAmt: 0,
+  return defaultReducer;
 };
 
 const CartContextProvider = (props) => {
   const [cartReducer, dispatchReducer] = useReducer(reducer, defaultReducer);
   const [showModal, setShowModal] = useState(false);
+  const [showOrderForm, setShowOrderForm] = useState(false);
 
   const addItemToCartHandler = (newItem) => {
     dispatchReducer({ type: "ADD", payload: newItem });
   };
 
   const removeItemToCartHandler = (id) => {
-    // console.log(id)
     dispatchReducer({ type: "REMOVE", id: id });
   };
 
+  const resetCartHandler = () => {
+    dispatchReducer({ type: "RESET" });
+  };
+
   const cartValue = {
-    showModal: showModal,
     items: cartReducer.items,
     totalAmt: cartReducer.totalAmt,
+    showModal: showModal,
     hideModalHandler: () => setShowModal(false),
-    showModalHandler: () => setShowModal(true),
+    showModalHandler: () => setShowModal(true),  
+    showOrderForm: showOrderForm,  
+    hideOrderFormHandler: () => setShowOrderForm(false),
+    showOrderFormHandler: () => setShowOrderForm(true),  
+    resetCartHandler: resetCartHandler,
     addItemToCart: addItemToCartHandler,
     removeItemFromCart: removeItemToCartHandler,
   };

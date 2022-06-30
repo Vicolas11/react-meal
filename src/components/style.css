@@ -7,6 +7,15 @@
   color: antiquewhite;
 }
 
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f18226;
+}
+
 body {
   margin: 0;
   background: #0a0a0a;
@@ -199,9 +208,11 @@ header div {
 .modal {
   position: fixed;
   z-index: 3;
-  top: 35vh;
+  top: 40vh;
   left: 50%;
   width: 70%;
+  max-height: 80vh;
+  overflow: auto;
   max-width: 45rem;
   background: antiquewhite;
   transition: top 4s linear;
@@ -293,6 +304,42 @@ header div {
   background-color: #f18226;
   color: antiquewhite;
   border: 1px solid #f18226;
+}
+
+/* ORDERING FORM */
+.order-form .form {
+  display: flex;
+  padding: 1rem 1rem;
+  overflow: auto;
+  max-height: 150px;
+  flex-direction: column;
+}
+
+.order-form .form div input {
+  border: 1px solid #ac4d00;
+  border-radius: 10px;
+  width: 100%;
+  padding: .6rem .5rem;
+  color: #0a0a0a;
+  margin-bottom: 2px;
+}
+
+.order-form .form div input:focus 
+.order-form .form div input:active {
+  border: 2px solid #ac4d00;
+  background: #ffc99c;
+}
+
+.invalid-text {
+  color: #ac000e;
+  margin-top: 1px;
+  text-align: start;
+}
+
+.invalid-form {
+  border: 2px solid #ac000e;
+  background: #ff9c9c;
+  padding: .2rem 1.5rem;
 }
 
 @media (max-width: 758px) {
